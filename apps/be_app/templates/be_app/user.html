@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <a href="/qoutes">Dashboard</a> <a href="/logout">Logout</a><br>
+    Posts by {{user_info.alias}}<br>
+    Count: {{favorite_count}}<br>
+    {% for qoute in user_favorites %}
+        {{qoute.qoute_author}} : {{qoute.qoute_message}}<br>
+    {% endfor %}
+</body>
+</html>

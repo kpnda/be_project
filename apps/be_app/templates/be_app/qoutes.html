@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <a href="/logout">Logout</a><br>
+    Welcome, {{user.alias}}!<br>
+    <h1>Qoutable Qoutes</h1><br>
+    {% for qoute in all_qoutes %}
+            {{qoute.qouted_by}}:{{qoute.message}}<br>
+            Posted by <a href="/users/{{qoute.user.id}}">{{qoute.user.name}}</a><br>
+            <form action="/process/favorite" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="user_id" value="{{qoute.user.id}}"/>
+                <input type="hidden" name="qoute_message" value="{{qoute.message}}"/>
+                <input type="hidden" name="qoute_author" value="{{qoute.qouted_by}}"/>
+                <input type="submit" value="Add to My List">
+            </form>
+    {% endfor %}
+
+    <h1>Your Favorites</h1><br>
+    {% for favorite in user_favorites %}
+        {{favorite.qoute_author}} : {{favorite.qoute_message}}<br>
+        Posted by: <a href="/users/{{favorite.user.id}}">{{favorite.user.name}}</a><br>
+        <form action="/process/remove" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name= "qoute_id" value="{{favorite.id}}">
+            <input type="submit" value="Remove From My List">
+        </form>
+    {% endfor %}
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    Contribute a Qoute:
+    <form action="/process/qoute" method="POST">
+        {% csrf_token %}
+        Qouted By: <input type="text" name="qouted_by">
+        Message: <textarea name=message></textarea>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
